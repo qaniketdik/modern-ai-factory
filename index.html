@@ -1,56 +1,221 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI ILOVA ZAVODI</title>
-  <style>
-    body{
-      margin:0;
-      background:#071826;
-      color:white;
-      font-family:Arial,sans-serif;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
-      text-align:center;
-    }
-    .box{
-      max-width:700px;
-      padding:30px;
-    }
-    h1{
-      font-size:42px;
-      margin-bottom:10px;
-    }
-    p{
-      font-size:20px;
-      line-height:1.6;
-    }
-    button{
-      margin-top:25px;
-      padding:16px 28px;
-      font-size:18px;
-      border:none;
-      border-radius:12px;
-      background:#00c2ff;
-      color:#00131f;
-      font-weight:bold;
-      cursor:pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI ILOVA ZAVODI</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 15px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #334155;
+        }
+        .badge {
+            background: rgba(37, 99, 233, 0.2);
+            color: #60a5fa;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        .desc {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+        section {
+            margin: 30px 0;
+        }
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        .mvp-grid {
+            display: grid;
+            gap: 12px;
+        }
+        .mvp-card {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+        }
+        .mvp-card h3 {
+            font-size: 16px;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+        .mvp-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .factory-box {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        button {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: var(--primary-dark);
+        }
+        .samples {
+            display: grid;
+            gap: 15px;
+        }
+        .sample-card {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        .sample-card h4 {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        .sample-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid #334155;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
-  <div class="box">
-    <h1>AI ILOVA ZAVODI</h1>
-    <p><strong>MODERN AI FACTORY v0.1</strong></p>
-    <p>
-      G'oyangizni yozing — zavod qolganini qiladi.
-      AI avtomatik ravishda tahlil qiladi, reja tuzadi,
-      ilovani yaratadi, testlaydi va ishga tushirishga tayyorlaydi.
-    </p>
-    <button>Zavodni ishga tushirish</button>
-  </div>
+
+<div class="container">
+    <header>
+        <span class="badge">Avtomatizatsiya</span>
+        <h1>AI ILOVA ZAVODI</h1>
+        <div class="subtitle">MODERN AI FACTORY v0.1</div>
+        <p class="desc">Oddiy g'oyadan tayyor ilovagacha AI orqali avtomatik ishlab chiqadigan platforma.</p>
+    </header>
+
+    <section>
+        <h2>Bizning MVP imkoniyatlari</h2>
+        <div class="mvp-grid">
+            <div class="mvp-card">
+                <h3>1. Idea Analyzer AI</h3>
+                <p>G'oyangizni tahlil qiladi va barcha talablarni shakllantiradi.</p>
+            </div>
+            <div class="mvp-card">
+                <h3>2. Architecture Planner AI</h3>
+                <p>Ilovaning kelajakdagi tuzilishi va ma'lumotlar bazasini loyihalaydi.</p>
+            </div>
+            <div class="mvp-card">
+                <h3>3. Report Generator</h3>
+                <p>Ishlab chiqish jarayoni bo'yicha to'liq hisobot va tayyor kodni taqdim etadi.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="factory-box">
+        <h2>Zavodni ishga tushirish</h2>
+        <textarea id="ideaInput" placeholder="G'oyangizni batafsil yozing... (Masalan: Onlayn do'kon yoki taksi xizmati ilovasi)"></textarea>
+        <button onclick="startFactory()">Zavodni ishga tushirish</button>
+    </section>
+
+    <section>
+        <h2>Tayyor loyihalardan namunalar</h2>
+        <div class="samples">
+            <div class="sample-card">
+                <h4>Smart Delivery App</h4>
+                <p>Sun'iy intellekt asosida ishlaydigan yetkazib berish xizmati ilovasi.</p>
+            </div>
+            <div class="sample-card">
+                <h4>AI Fitness Coach</h4>
+                <p>Foydalanuvchi uchun shaxsiy mashg'ulotlar rejasini tuzuvchi mobil ilova.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 AI ILOVA ZAVODI. Barcha huquqlar himoyalangan.</p>
+    </footer>
+</div>
+
+<script>
+function startFactory() {
+    const idea = document.getElementById('ideaInput').value;
+    if (!idea.trim()) {
+        alert("Iltimos, avval g'oyangizni yozing!");
+        return;
+    }
+    alert("Zavod ishga tushdi! G'oyangiz tahlil qilinmoqda:\n\n" + idea);
+}
+</script>
+
 </body>
 </html>
