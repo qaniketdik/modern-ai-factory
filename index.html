@@ -3,51 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI ILOVA ZAVODI</title>
+    <title>AI ZAVOD</title>
     <style>
         body { background: #0f172a; color: white; font-family: sans-serif; padding: 20px; text-align: center; }
         .box { background: #1e293b; border: 2px solid #2563eb; padding: 20px; border-radius: 12px; max-width: 500px; margin: 0 auto; }
-        textarea { width: 100%; height: 120px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-bottom: 10px; font-size: 14px; }
-        button { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .status, .res { display: none; background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left; font-size: 14px; }
-        .res { border: 2px solid #22c55e; }
-        .link-title { color: #22c55e; font-weight: bold; font-size: 16px; margin-bottom: 10px; display: block; }
-        .live-link { color: #4ade80; font-weight: bold; text-decoration: underline; font-size: 15px; word-break: break-all; display: inline-block; margin-top: 5px; }
+        textarea { width: 100%; height: 120px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        button { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .res { display: none; background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left; border: 2px solid #22c55e; }
     </style>
 </head>
 <body>
     <div class="box">
         <h2>AI ILOVA ZAVODI v0.1</h2>
-        <p style="color: #94a3b8; font-size: 13px; margin-bottom: 15px;">Modern AI Factory</p>
-        <textarea id="inp" placeholder="G'oyangizni batafsil yozing..."></textarea>
-        <button onclick="start()">Zavodni ishga tushirish</button>
-        <div id="st" class="status"></div>
+        <textarea id="inp" placeholder="G'oyangizni yozing..."></textarea>
+        <button onclick="abc()">Zavodni ishga tushirish</button>
         <div id="rs" class="res">
-            <span class="link-title">✅ ZAVOD HISOBOTI TAYYOR!</span>
+            <span style="color:#22c55e; font-weight:bold;">✅ ZAVOD HISOBOTI TAYYOR!</span>
             <p>1. Idea Analyzer AI g'oyani tahlil qildi.</p>
             <p>2. Architecture Planner AI tizimni loyihaladi.</p>
             <p>3. Report Generator hamma narsani tayyorladi.</p>
-            <hr style="border: 0; border-top: 1px solid #334155; margin: 10px 0;">
+            <hr style="border:0; border-top:1px solid #334155; margin:10px 0;">
             <p>🌐 <b>Tayyor ilovani brauzerda sinash manzili:</b></p>
-            <a href="https://github.io" class="live-link">https://github.io</a>
+            <a href="https://github.io" style="color:#4ade80; font-weight:bold; text-decoration:underline;">https://github.io</a>
         </div>
     </div>
 <script>
-function start() {
-    var val = document.getElementById('inp').value;
-    if(!val.trim()) { alert("Iltimos, g'oyangizni yozing!"); return; }
-    var st = document.getElementById('st'); var rs = document.getElementById('rs');
-    st.style.display = "block"; rs.style.display = "none";
-    st.innerHTML = "⏳ 1. Idea Analyzer AI ishlamoqda...";
-    setTimeout(function() {
-        st.innerHTML = "⚙️ 2. Architecture Planner AI loyihalamoqda...";
-        setTimeout(function() {
-            st.innerHTML = "🚀 3. Report Generator kod yaratmoqda...";
-            setTimeout(function() {
-                st.style.display = "none"; rs.style.display = "block";
-            }, 1000);
-        }, 1000);
-    }, 1000);
+function abc() {
+    var txt = document.getElementById('inp').value;
+    if(!txt.trim()) { alert("G'oyani yozing!"); return; }
+    document.getElementById('rs').style.display = "block";
 }
 </script>
 </body>
