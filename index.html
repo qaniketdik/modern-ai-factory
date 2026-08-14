@@ -12,7 +12,6 @@
             --bg-card: #1e293b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent: #38bdf8;
             --success: #22c55e;
         }
         * {
@@ -36,16 +35,6 @@
             padding: 30px 0;
             border-bottom: 1px solid #334155;
         }
-        .badge {
-            background: rgba(37, 99, 233, 0.2);
-            color: #60a5fa;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
         h1 {
             font-size: 28px;
             color: #ffffff;
@@ -56,7 +45,6 @@
             color: var(--primary);
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
             margin-bottom: 15px;
         }
         .desc {
@@ -72,7 +60,7 @@
             color: #ffffff;
         }
         .factory-box {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            background: #1e293b;
             border: 2px solid var(--primary);
             padding: 20px;
             border-radius: 12px;
@@ -89,10 +77,6 @@
             resize: none;
             margin-bottom: 15px;
         }
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
         button {
             width: 100%;
             background: var(--primary);
@@ -103,41 +87,11 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
-        }
-        button:hover {
-            background: var(--primary-dark);
-        }
-        .process-box {
-            display: none;
-            background: #1e293b;
-            border: 1px solid #334155;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-        .step {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-        .step.active {
-            color: var(--accent);
-            font-weight: bold;
-        }
-        .step.done {
-            color: var(--success);
-        }
-        .step-icon {
-            margin-right: 10px;
-            font-weight: bold;
         }
         .result-box {
             display: none;
             background: #1e293b;
-            border: 1px solid var(--success);
+            border: 2px solid var(--success);
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
@@ -156,7 +110,6 @@
             font-size: 13px;
             color: #38bdf8;
             white-space: pre-wrap;
-            border: 1px solid #334155;
         }
         .mvp-grid {
             display: grid;
@@ -191,7 +144,6 @@
 
 <div class="container">
     <header>
-        <span class="badge">Avtomatizatsiya</span>
         <h1>AI ILOVA ZAVODI</h1>
         <div class="subtitle">MODERN AI FACTORY v0.1</div>
         <p class="desc">Oddiy g'oyadan tayyor ilovagacha AI orqali avtomatik ishlab chiqadigan platforma.</p>
@@ -199,14 +151,8 @@
 
     <section class="factory-box">
         <h2>Zavodni ishga tushirish</h2>
-        <textarea id="ideaInput" placeholder="G'oyangizni batafsil yozing... (Masalan: Onlayn do'kon yoki taksi xizmati ilovasi)"></textarea>
-        <button id="startBtn" onclick="startFactory()">Zavodni ishga tushirish</button>
-
-        <div id="processBox" class="process-box">
-            <div id="step1" class="step"><span class="step-icon">⏳</span> 1. G'oya tahlil qilinmoqda (Idea Analyzer)...</div>
-            <div id="step2" class="step"><span class="step-icon">⏳</span> 2. Tizim arxitekturasi loyihalanmoqda...</div>
-            <div id="step3" class="step"><span class="step-icon">⏳</span> 3. Tayyor kod va hisobot shakllantirilmoqda...</div>
-        </div>
+        <textarea id="ideaInput" placeholder="G'oyangizni batafsil yozing..."></textarea>
+        <button onclick="runFactory()">Zavodni ishga tushirish</button>
     </section>
 
     <div id="resultBox" class="result-box">
@@ -225,10 +171,6 @@
                 <h3>2. Architecture Planner AI</h3>
                 <p>Ilovaning kelajakdagi tuzilishi va ma'lumotlar bazasini loyihalaydi.</p>
             </div>
-            <div class="mvp-card">
-                <h3>3. Report Generator</h3>
-                <p>Ishlab chiqish jarayoni bo'yicha to'liq hisobot va tayyor kodni taqdim etadi.</p>
-            </div>
         </div>
     </section>
 
@@ -238,63 +180,28 @@
 </div>
 
 <script>
-function startFactory() {
-    const idea = document.getElementById('ideaInput').value;
-    if (!idea.trim()) {
+function runFactory() {
+    var txt = document.getElementById('ideaInput').value;
+    if (!txt.trim()) {
         alert("Iltimos, avval g'oyangizni yozing!");
         return;
     }
-
-    document.getElementById('startBtn').disabled = true;
-    document.getElementById('startBtn').innerText = "Zavod ishlamoqda...";
-    document.getElementById('processBox').style.display = "block";
-    document.getElementById('resultBox').style.display = "none";
-
-    const s1 = document.getElementById('step1');
-    const s2 = document.getElementById('step2');
-    const s3 = document.getElementById('step3');
-
-    s1.className = "step active";
-    s1.innerHTML = "<span class='step-icon'>⚙️</span> 1. G'oya tahlil qilinmoqda (Idea Analyzer)...";
-
-    setTimeout(() => {
-        s1.className = "step done";
-        s1.innerHTML = "<span class='step-icon'>✅</span> 1. G'oya muvaffaqiyatli tahlil qilindi.";
-        s2.className = "step active";
-        s2.innerHTML = "<span class='step-icon'>⚙️</span> 2. Tizim arxitekturasi loyihalanmoqda...";
-        
-        setTimeout(() => {
-            s2.className = "step done";
-            s2.innerHTML = "<span class='step-icon'>✅</span> 2. Arxitektura va ma'lumotlar bazasi tayyor.";
-            s3.className = "step active";
-            s3.innerHTML = "<span class='step-icon'>⚙️</span> 3. Tayyor kod va hisobot shakllantirilmoqda...";
-
-            setTimeout(() => {
-                s3.className = "step done";
-                s3.innerHTML = "<span class='step-icon'>✅</span> 3. Hamma hujjatlar muvaffaqiyatli yaratildi.";
-                
-                document.getElementById('startBtn').disabled = false;
-                document.getElementById('startBtn').innerText = "Zavodni qayta ishga tushirish";
-                
-                showResult(idea);
-            }, 1500);
-        }, 1500);
-    }, 1500);
-}
-
-function showResult(userIdea) {
-    const resultBox = document.getElementById('resultBox');
-    const resultContent = document.getElementById('resultContent');
     
-    const report = `[LOYIHA NOM] : AI_ZAVOD_OUTPUT\n` +
-                   `[ASOSIY G'OYA]: ${userIdea}\n\n` +
-                   `1. STRUKTURA (FUNKSIYALAR):\n` +
-                   ` - Foydalanuvchi tizimi (Login/Register)\n` +
-                   ` - Ma'lumotlar boshqaruvi (Dashboard)\n` +
-                   ` - AI integratsiya moduli va API ulanishlari\n\n` +
-                   `2. TEXNOLOGIK STEK:\n` +
-                   ` - Frontend: HTML5, CSS3, JavaScript (Tailwind/Modern)\n` +
-                   ` - Backend: Node.js (Express) yoki Python (FastAPI)\n` +
-                   ` - Baza: PostgreSQL / MongoDB\n\n` +
-                   `3. KELAJAKDAGI CHORA-TADBIRLAR:\n` +
-                   ` - GitHub repozitoriyasiga kod yuklash yakunlandi.\n` +
+    var out = "[LOYIHA NOM] : AI_ZAVOD_OUTPUT\n" +
+              "[ASOSIY G'OYA]: " + txt + "\n\n" +
+              "1. STRUKTURA (FUNKSIYALAR):\n" +
+              " - Foydalanuvchi tizimi (Login/Register)\n" +
+              " - Ma'lumotlar boshqaruvi (Dashboard)\n\n" +
+              "2. TEXNOLOGIK STEK:\n" +
+              " - Frontend: HTML5, CSS3, JavaScript\n" +
+              " - Backend: Node.js / Python\n\n" +
+              "3. YAKUNIY HOLAT:\n" +
+              " - Mobil moslashuvchanlik 100% sozlangan.";
+              
+    document.getElementById('resultContent').innerText = out;
+    document.getElementById('resultBox').style.style.display = "block";
+}
+</script>
+
+</body>
+</html>
