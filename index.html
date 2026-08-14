@@ -12,6 +12,7 @@
             --bg-card: #1e293b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --accent: #38bdf8;
             --success: #22c55e;
         }
         * {
@@ -88,6 +89,36 @@
             font-weight: bold;
             cursor: pointer;
         }
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+        .process-box {
+            display: none;
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        .step.active {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .step.done {
+            color: var(--success);
+        }
+        .step-icon {
+            margin-right: 10px;
+            font-weight: bold;
+        }
         .result-box {
             display: none;
             background: #1e293b;
@@ -110,6 +141,26 @@
             font-size: 13px;
             color: #38bdf8;
             white-space: pre-wrap;
+            margin-bottom: 15px;
+        }
+        .link-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px dashed var(--success);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .link-box p {
+            font-size: 13px;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+        .live-link {
+            color: #4ade80;
+            font-weight: bold;
+            text-decoration: underline;
+            word-break: break-all;
+            font-size: 14px;
         }
         .mvp-grid {
             display: grid;
@@ -152,12 +203,22 @@
     <section class="factory-box">
         <h2>Zavodni ishga tushirish</h2>
         <textarea id="ideaInput" placeholder="G'oyangizni batafsil yozing..."></textarea>
-        <button onclick="runFactory()">Zavodni ishga tushirish</button>
+        <button id="startBtn" onclick="runFactory()">Zavodni ishga tushirish</button>
+
+        <div id="processBox" class="process-box">
+            <div id="step1" class="step"><span class="step-icon">⏳</span> 1. Idea Analyzer AI ishlamoqda...</div>
+            <div id="step2" class="step"><span class="step-icon">⏳</span> 2. Architecture Planner AI loyihalamoqda...</div>
+            <div id="step3" class="step"><span class="step-icon">⏳</span> 3. Report Generator hisobot va kod yaratmoqda...</div>
+        </div>
     </section>
 
     <div id="resultBox" class="result-box">
         <div class="result-title">🚀 Zavod hisoboti tayyor!</div>
         <div id="resultContent" class="result-content"></div>
+        <div class="link-box">
+            <p>🌐 Tayyor ilovani brauzerda sinash manzili:</p>
+            <span id="appLink" class="live-link"></span>
+        </div>
     </div>
 
     <section>
@@ -170,6 +231,10 @@
             <div class="mvp-card">
                 <h3>2. Architecture Planner AI</h3>
                 <p>Ilovaning kelajakdagi tuzilishi va ma'lumotlar bazasini loyihalaydi.</p>
+            </div>
+            <div class="mvp-card">
+                <h3>3. Report Generator</h3>
+                <p>Ishlab chiqish jarayoni bo'yicha to'liq hisobot va tayyor kodni taqdim etadi.</p>
             </div>
         </div>
     </section>
@@ -187,21 +252,53 @@ function runFactory() {
         return;
     }
     
-    var out = "[LOYIHA NOM] : AI_ZAVOD_OUTPUT\n" +
-              "[ASOSIY G'OYA]: " + txt + "\n\n" +
-              "1. STRUKTURA (FUNKSIYALAR):\n" +
-              " - Foydalanuvchi tizimi (Login/Register)\n" +
-              " - Ma'lumotlar boshqaruvi (Dashboard)\n\n" +
-              "2. TEXNOLOGIK STEK:\n" +
-              " - Frontend: HTML5, CSS3, JavaScript\n" +
-              " - Backend: Node.js / Python\n\n" +
-              "3. YAKUNIY HOLAT:\n" +
-              " - Mobil moslashuvchanlik 100% sozlangan.";
-              
-    document.getElementById('resultContent').innerText = out;
-    document.getElementById('resultBox').style.display = "block";
-}
-</script>
+    var btn = document.getElementById('startBtn');
+    var pBox = document.getElementById('processBox');
+    var rBox = document.getElementById('resultBox');
+    
+    btn.disabled = true;
+    pBox.style.display = "block";
+    rBox.style.display = "none";
+    
+    var s1 = document.getElementById('step1');
+    var s2 = document.getElementById('step2');
+    var s3 = document.getElementById('step3');
+    
+    s1.className = "step active";
+    s1.innerHTML = "<span class='step-icon'>⚙️</span> 1. Idea Analyzer AI ishlamoqda...";
+    s2.className = "step";
+    s2.innerHTML = "<span class='step-icon'>⏳</span> 2. Architecture Planner AI loyihalamoqda...";
+    s3.className = "step";
+    s3.innerHTML = "<span class='step-icon'>⏳</span> 3. Report Generator hisobot va kod yaratmoqda...";
 
-</body>
-</html>
+    setTimeout(function() {
+        s1.className = "step done";
+        s1.innerHTML = "<span class='step-icon'>✅</span> 1. Idea Analyzer AI g'oyani tahlil qildi.";
+        s2.className = "step active";
+        s2.innerHTML = "<span class='step-icon'>⚙️</span> 2. Architecture Planner AI loyihalamoqda...";
+        
+        setTimeout(function() {
+            s2.className = "step done";
+            s2.innerHTML = "<span class='step-icon'>✅</span> 2. Architecture Planner AI tizimni loyihaladi.";
+            s3.className = "step active";
+            s3.innerHTML = "<span class='step-icon'>⚙️</span> 3. Report Generator hisobot va kod yaratmoqda...";
+            
+            setTimeout(function() {
+                s3.className = "step done";
+                s3.innerHTML = "<span class='step-icon'>✅</span> 3. Report Generator hamma narsani tayyorladi.";
+                
+                btn.disabled = false;
+                
+                var out = "[LOYIHA NOM] : AI_ZAVOD_OUTPUT\n" +
+                          "[ASOSIY G'OYA]: " + txt + "\n\n" +
+                          "1. STRUKTURA (FUNKSIYALAR):\n" +
+                          " - Foydalanuvchi tizimi (Login/Register)\n" +
+                          " - Ma'lumotlar boshqaruvi (Dashboard)\n\n" +
+                          "2. TEXNOLOGIK STEK:\n" +
+                          " - Frontend: HTML5, CSS3, JavaScript\n" +
+                          " - Backend: Node.js / Python\n\n" +
+                          "3. YAKUNIY HOLAT:\n" +
+                          " - Mobil moslashuvchanlik 100% sozlangan.";
+                          
+                document.getElementById('resultContent').innerText = out;
+                
