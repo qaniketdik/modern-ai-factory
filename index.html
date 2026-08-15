@@ -1,38 +1,170 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI ZAVOD</title>
-    <style>
-        body { background: #0f172a; color: white; font-family: sans-serif; padding: 20px; text-align: center; }
-        .box { background: #1e293b; border: 2px solid #2563eb; padding: 20px; border-radius: 12px; max-width: 500px; margin: 0 auto; }
-        textarea { width: 100%; height: 120px; background: #0f172a; color: white; border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
-        button { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .res { display: none; background: #0f172a; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left; border: 2px solid #22c55e; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azizbekni AI Zavodi</title>
+<style>
+body{background:#0f172a;color:#fff;font-family:sans-serif;padding:20px;text-align:center;margin:0}
+.box{background:#1e293b;border:2px solid #2563eb;padding:20px;border-radius:12px;max-width:520px;margin:20px auto;position:relative}
+.flags{margin-bottom:15px}
+.flags button{background:none;border:none;font-size:26px;margin:0 4px;cursor:pointer;opacity:.5}
+.flags button.active{opacity:1}
+textarea{width:100%;height:110px;background:#0f172a;color:#fff;border:1px solid #334155;border-radius:8px;padding:10px;margin-bottom:10px;box-sizing:border-box}
+button.main{width:100%;background:#2563eb;color:#fff;border:none;padding:12px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:16px}
+.gear{position:fixed;top:15px;right:20px;font-size:22px;cursor:pointer;background:none;border:none;color:#fff}
+.agents{display:none;text-align:left;margin-top:15px}
+.agents p{opacity:.3}
+.agents p.done{opacity:1;color:#4ade80}
+.res{display:none;background:#0f172a;padding:15px;border-radius:8px;margin-top:15px;text-align:left;border:2px solid #22c55e}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center}
+.modal .inner{background:#1e293b;padding:20px;border-radius:12px;max-width:400px;width:90%}
+.modal input{width:100%;padding:8px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#fff;box-sizing:border-box;margin:10px 0}
+.modal button{width:100%;padding:10px;border-radius:6px;border:none;background:#2563eb;color:#fff;font-weight:bold;margin-top:5px}
+</style>
 </head>
 <body>
-    <div class="box">
-        <h2>AI ILOVA ZAVODI v0.1</h2>
-        <textarea id="inp" placeholder="G'oyangizni yozing..."></textarea>
-        <button onclick="abc()">Zavodni ishga tushirish</button>
-        <div id="rs" class="res">
-            <span style="color:#22c55e; font-weight:bold;">✅ ZAVOD HISOBOTI TAYYOR!</span>
-            <p>1. Idea Analyzer AI g'oyani tahlil qildi.</p>
-            <p>2. Architecture Planner AI tizimni loyihaladi.</p>
-            <p>3. Report Generator hamma narsani tayyorladi.</p>
-            <hr style="border:0; border-top:1px solid #334155; margin:10px 0;">
-            <p>🌐 <b>Tayyor ilovani brauzerda sinash manzili:</b></p>
-            <a href="https://qaniketdik.github.io/modern-ai-factory/preview.html" style="color:#4ade80; font-weight:bold; text-decoration:underline;">https://qaniketdik.github.io/modern-ai-factory/preview.html</a>
-        </div>
-    </div>
+<button class="gear" onclick="openSettings()">⚙️</button>
+<div class="box">
+ <div class="flags">
+   <button onclick="setLang('uz')" id="f-uz">🇺🇿</button>
+   <button onclick="setLang('en')" id="f-en">🇬🇧</button>
+   <button onclick="setLang('ru')" id="f-ru">🇷🇺</button>
+   <button onclick="setLang('tr')" id="f-tr">🇹🇷</button>
+ </div>
+ <h2 id="t-title"></h2>
+ <p id="t-sub" style="opacity:.7;font-size:14px"></p>
+ <textarea id="inp"></textarea>
+ <button class="main" id="t-btn" onclick="startFactory()"></button>
+ <div class="agents" id="agents">
+   <p id="a1"></p>
+   <p id="a2"></p>
+   <p id="a3"></p>
+ </div>
+ <div class="res" id="rs">
+   <span style="color:#22c55e;font-weight:bold" id="t-reportTitle"></span>
+   <p id="t-linkLabel" style="margin-top:10px"></p>
+   <a href="preview.html" target="_blank" style="display:block;background:#22c55e;color:#0f172a;text-align:center;padding:10px;border-radius:8px;font-weight:bold;text-decoration:none;margin-top:5px" id="t-openBtn"></a>
+ </div>
+</div>
+
+<div class="modal" id="modal">
+ <div class="inner">
+   <h3 id="t-settingsTitle"></h3>
+   <p style="font-size:13px;opacity:.8" id="t-apiKeyNote"></p>
+   <input type="text" id="apiKeyInput">
+   <button onclick="saveKey()" id="t-saveBtn"></button>
+   <button onclick="closeSettings()" style="background:#334155;margin-top:8px" id="t-closeBtn"></button>
+ </div>
+</div>
+
 <script>
-function abc() {
-    var txt = document.getElementById('inp').value;
-    if(!txt.trim()) { alert("G'oyani yozing!"); return; }
-    document.getElementById('rs').style.display = "block";
+const T = {
+ uz:{title:"Azizbekni AI Zavodi",sub:"G'oyangizni yozing, Zavod uni tayyor ilovaga aylantiradi",placeholder:"Masalan: Bolalar uchun matematika darsligi ilovasi",btn:"Zavodni ishga tushirish",a1:"1. Idea Analyzer AI g'oyani tahlil qilmoqda...",a2:"2. Architecture Planner AI tizimni loyihalamoqda...",a3:"3. Report Generator ilovani yaratmoqda...",reportTitle:"✅ ZAVOD HISOBOTI TAYYOR!",linkLabel:"Tayyor ilovani sinash uchun bosing:",openBtn:"🚀 Ilovani ochish",settingsTitle:"Sozlamalar (ixtiyoriy)",apiKeyNote:"Haqiqiy AI (Gemini) orqali kod yaratishni xohlasangiz, bepul API kalitingizni shu yerga kiriting. Kalit kiritilmasa, Zavod o'zining ichki bepul generatoridan foydalanadi.",apiKeyPlaceholder:"Gemini API kalitini shu yerga qo'ying",saveBtn:"Saqlash",closeBtn:"Yopish"},
+
+en:{title:"Azizbek's AI Factory",sub:"Write your idea, the Factory turns it into a ready app",placeholder:"E.g: A math learning app for children",btn:"Start the Factory",a1:"1. Idea Analyzer AI is analyzing the idea...",a2:"2. Architecture Planner AI is designing the system...",a3:"3. Report Generator is creating the app...",reportTitle:"✅ FACTORY REPORT READY!",linkLabel:"Tap to test the ready app:",openBtn:"🚀 Open the app",settingsTitle:"Settings (optional)",apiKeyNote:"For real AI (Gemini) generation, enter your free API key here. Without a key, the Factory uses its built-in offline generator.",apiKeyPlaceholder:"Paste your Gemini API key here",saveBtn:"Save",closeBtn:"Close"},
+ ru:{title:"ИИ-Завод Азизбека",sub:"Опишите идею, и Завод создаст готовое приложение",placeholder:"Например: приложение для изучения математики",btn:"Запустить Завод",a1:"1. Idea Analyzer AI анализирует идею...",a2:"2. Architecture Planner AI проектирует систему...",a3:"3. Report Generator создаёт приложение...",reportTitle:"✅ ОТЧЁТ ЗАВОДА ГОТОВ!",linkLabel:"Нажмите, чтобы протестировать приложение:",openBtn:"🚀 Открыть приложение",settingsTitle:"Настройки (необязательно)",apiKeyNote:"Для реальной генерации через AI (Gemini) введите бесплатный API ключ. Без ключа Завод использует встроенный офлайн-генератор.",apiKeyPlaceholder:"Вставьте API ключ Gemini",saveBtn:"Сохранить",closeBtn:"Закрыть"},
+ tr:{title:"Azizbek'in AI Fabrikası",sub:"Fikrinizi yazın, Fabrika onu hazır bir uygulamaya dönüştürsün",placeholder:"Örn: Çocuklar için matematik uygulaması",btn:"Fabrikayı Başlat",a1:"1. Idea Analyzer AI fikri analiz ediyor...",a2:"2. Architecture Planner AI sistemi tasarlıyor...",a3:"3. Report Generator uygulamayı oluşturuyor...",reportTitle:"✅ FABRİKA RAPORU HAZIR!",linkLabel:"Hazır uygulamayı denemek için dokunun:",openBtn:"🚀 Uygulamayı aç",settingsTitle:"Ayarlar (isteğe bağlı)",apiKeyNote:"Gerçek AI (Gemini) ile kod üretmek için ücretsiz API anahtarınızı buraya girin. Anahtar girilmezse Fabrika dahili çevrimdışı üreticiyi kullanır.",apiKeyPlaceholder:"Gemini API anahtarınızı buraya yapıştırın",saveBtn:"Kaydet",closeBtn:"Kapat"}
+};
+
+let curLang = localStorage.getItem('zavod_lang') || 'uz';
+
+function applyLang(){
+ const t = T[curLang];
+ document.getElementById('t-title').textContent = t.title;
+ document.getElementById('t-sub').textContent = t.sub;
+ document.getElementById('inp').placeholder = t.placeholder;
+ document.getElementById('t-btn').textContent = t.btn;
+ document.getElementById('a1').textContent = t.a1;
+ document.getElementById('a2').textContent = t.a2;
+ document.getElementById('a3').textContent = t.a3;
+ document.getElementById('t-reportTitle').textContent = t.reportTitle;
+ document.getElementById('t-linkLabel').textContent = t.linkLabel;
+ document.getElementById('t-openBtn').textContent = t.openBtn;
+ document.getElementById('t-settingsTitle').textContent = t.settingsTitle;
+ document.getElementById('t-apiKeyNote').textContent = t.apiKeyNote;
+ document.getElementById('apiKeyInput').placeholder = t.apiKeyPlaceholder;
+ document.getElementById('t-saveBtn').textContent = t.saveBtn;
+ document.getElementById('t-closeBtn').textContent = t.closeBtn;
+ ['uz','en','ru','tr'].forEach(function(l){document.getElementById('f-'+l).className = (l===curLang?'active':'');});
 }
+
+function setLang(l){ curLang = l; localStorage.setItem('zavod_lang', l); applyLang(); }
+
+function openSettings(){
+ document.getElementById('apiKeyInput').value = localStorage.getItem('zavod_api_key') || '';
+ document.getElementById('modal').style.display='flex';
+}
+function closeSettings(){ document.getElementById('modal').style.display='none'; }
+function saveKey(){
+ const v = document.getElementById('apiKeyInput').value.trim();
+ if(v){ localStorage.setItem('zavod_api_key', v); } else { localStorage.removeItem('zavod_api_key'); }
+ closeSettings();
+}
+
+function buildLocalApp(idea){
+ const lower = idea.toLowerCase();
+ let icon='📱', cat='Umumiy ilova';
+ if(/taxi|taksi/.test(lower)){icon='🚕';cat='Transport ilovasi';}
+ else if(/dars|maktab|talim|compyuter|kompyuter|oquv|matematika/.test(lower)){icon='📚';cat="Talim ilovasi";}
+ else if(/dokon|savdo|market|magazin/.test(lower)){icon='🛒';cat='Savdo ilovasi';}
+ else if(/shifokor|tibbiyot|sogliq|klinika/.test(lower)){icon='🏥';cat='Tibbiyot ilovasi';}
+ const safeIdea = idea.replace(/</g,'&lt;');
+ return '<!DOCTYPE html><html lang="uz"><head><meta charset="UTF-8">' +
+ '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+ '<title>'+cat+'</title><style>body{background:#0f172a;color:#fff;font-family:sans-serif;padding:20px;text-align:center}' +
+ '.box{background:#1e293b;border:2px solid #2563eb;padding:25px;border-radius:14px;max-width:480px;margin:20px auto}' +
+ '.icon{font-size:50px}ul{text-align:left}li{margin:8px 0}' +
+ 'button{background:#2563eb;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-weight:bold;margin-top:15px}</style></head>' +
+ '<body><div class="box"><div class="icon">'+icon+'</div><h2>'+cat+'</h2>' +
+ '<p style="opacity:.8">G\'oya: '+safeIdea+'</p>' +
+ '<ul><li>Foydalanuvchi royxatdan otish va kirish</li><li>Asosiy funksional bolim</li><li>Bildirishnomalar tizimi</li><li>Sozlamalar sahifasi</li></ul>' +
+ '<button onclick="alert(\'Demo tugma bosildi!\')">Sinab korish</button>' +
+ '</div><script>console.log("Demo ilova: '+cat+'");<\/script></body></html>';
+}
+
+async function callGemini(idea, key){
+ const prompt = "Quyidagi goya asosida toliq, ishlaydigan, bitta HTML faylda (CSS va JS shu fayl ichida) demo veb-ilova yoz. Faqat toza HTML kodini qaytar, tushuntirish yozma, markdown belgilarisiz: " + idea;
+ const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + key;
+ const resp = await fetch(url, {
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body: JSON.stringify({contents:[{parts:[{text:prompt}]}]})
+ });
+ const data = await resp.json();
+ let text = data.candidates && data.candidates[0] && data.candidates[0].content.parts[0].text;
+ if(!text) throw new Error('AI javob bermadi');
+ text = text.replace(/html/g,'').replace(/``/g,'').trim();
+ return text;
+}
+
+async function startFactory(){
+ const idea = document.getElementById('inp').value.trim();
+ if(!idea){ alert(T[curLang].placeholder); return; }
+ document.getElementById('rs').style.display='none';
+ document.getElementById('agents').style.display='block';
+ document.getElementById('a1').className=''; document.getElementById('a2').className=''; document.getElementById('a3').className='';
+
+ await new Promise(function(r){setTimeout(r,700);});
+ document.getElementById('a1').className='done';
+ await new Promise(function(r){setTimeout(r,700);});
+ document.getElementById('a2').className='done';
+ await new Promise(function(r){setTimeout(r,700);});
+
+ const key = localStorage.getItem('zavod_api_key');
+ let appHtml;
+ try{
+   if(key){ appHtml = await callGemini(idea, key); }
+   else { appHtml = buildLocalApp(idea); }
+ }catch(e){
+   appHtml = buildLocalApp(idea);
+ }
+ localStorage.setItem('zavod_generated_app', appHtml);
+ document.getElementById('a3').className='done';
+ document.getElementById('rs').style.display='block';
+}
+
+applyLang();
 </script>
 </body>
 </html>
